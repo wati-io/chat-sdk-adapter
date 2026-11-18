@@ -1,0 +1,4 @@
+# Owners review every change to the adapter. Vercel's vendor-official listing asks for a
+# named maintainer. Replace with a wati-io team (for example @wati-io/integrations) when
+# one exists; every owner must have write access to the repository.
+* @carson-clare

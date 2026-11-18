@@ -1,0 +1,13 @@
+{
+  "name": "wati-chat-sdk",
+  "private": true,
+  "workspaces": [
+    "adapter"
+  ],
+  "scripts": {
+    "build": "npm run build -w @wati-io/chat-sdk-adapter",
+    "test": "npm test -w @wati-io/chat-sdk-adapter",
+    "typecheck": "npm run typecheck -w @wati-io/chat-sdk-adapter",
+    "dev": "npm --prefix example run dev"
+  }
+}

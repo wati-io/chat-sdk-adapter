@@ -1,0 +1,72 @@
+{
+  "name": "@wati-io/chat-sdk-adapter",
+  "version": "0.1.0",
+  "description": "Official Wati adapter for Chat SDK: build WhatsApp bots on your Wati number",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run --coverage",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist coverage",
+    "prepublishOnly": "npm run typecheck && npm test && npm run build"
+  },
+  "peerDependencies": {
+    "chat": "^4.45.0"
+  },
+  "dependencies": {
+    "@chat-adapter/shared": "^4.45.0"
+  },
+  "devDependencies": {
+    "@chat-adapter/state-memory": "^4.45.0",
+    "@types/node": "^22.0.0",
+    "@vitest/coverage-v8": "^4.0.0",
+    "chat": "^4.45.0",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.0",
+    "vitest": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=20.19"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "chat-sdk",
+    "chat-adapter",
+    "wati",
+    "whatsapp",
+    "whatsapp-business-api",
+    "chatbot",
+    "vercel"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wati-io/chat-sdk-adapter.git",
+    "directory": "adapter"
+  },
+  "homepage": "https://github.com/wati-io/chat-sdk-adapter/tree/main/adapter#readme",
+  "bugs": {
+    "url": "https://github.com/wati-io/chat-sdk-adapter/issues"
+  },
+  "author": {
+    "name": "Wati",
+    "url": "https://www.wati.io"
+  }
+}

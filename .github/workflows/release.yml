@@ -1,0 +1,64 @@
+name: Release
+
+# Publishes @wati-io/chat-sdk-adapter to npm with provenance when a version tag is pushed:
+#
+#   1. Set "version" in adapter/package.json and add a CHANGELOG.md entry, merge to main.
+#   2. git tag v0.1.0 && git push origin v0.1.0
+#
+# Authentication: npm trusted publishing (OIDC), bound to this workflow file and the
+# npm-release environment. npm only allows a trusted publisher on a package that already
+# exists, so the first version uses an NPM_TOKEN secret on the npm-release environment.
+# Configure the trusted publisher on npmjs.com after the first release, then delete the secret.
+#
+# Provenance needs a public repository.
+on:
+  push:
+    tags: ["v*"]
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Check and publish
+    runs-on: ubuntu-latest
+    environment: npm-release
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          cache: npm
+          registry-url: https://registry.npmjs.org
+      - name: Require the tag to match adapter/package.json
+        run: |
+          set -euo pipefail
+          version="$(node -p "require('./adapter/package.json').version")"
+          if [ "v${version}" != "${GITHUB_REF_NAME}" ]; then
+            echo "::error::Tag ${GITHUB_REF_NAME} does not match adapter/package.json version ${version}."
+            exit 1
+          fi
+          if npm view "@wati-io/chat-sdk-adapter@${version}" version >/dev/null 2>&1; then
+            echo "::error::@wati-io/chat-sdk-adapter@${version} is already on npm."
+            exit 1
+          fi
+      - run: npm ci
+      - run: npm run typecheck -w @wati-io/chat-sdk-adapter
+      - run: npm test
+      - run: npm audit --omit=dev --audit-level=high -w @wati-io/chat-sdk-adapter
+      - run: npm run build -w @wati-io/chat-sdk-adapter
+      - name: Publish with provenance
+        working-directory: adapter
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          set -euo pipefail
+          # Bootstrap only: a token until the trusted publisher exists; OIDC otherwise.
+          if [ -n "${NPM_TOKEN}" ]; then export NODE_AUTH_TOKEN="${NPM_TOKEN}"; fi
+          npm publish --provenance --access public --ignore-scripts
