@@ -3,12 +3,12 @@ name: Release
 # Publishes @wati-io/chat-sdk-adapter to npm with provenance when a version tag is pushed:
 #
 #   1. Set "version" in adapter/package.json and add a CHANGELOG.md entry, merge to main.
-#   2. git tag v0.1.0 && git push origin v0.1.0
+#   2. git tag v0.1.1 && git push origin v0.1.1   (only repo admins can push v* tags)
+#   3. Approve the run when GitHub asks: the npm-release environment requires a reviewer.
 #
 # Authentication: npm trusted publishing (OIDC), bound to this workflow file and the
-# npm-release environment. npm only allows a trusted publisher on a package that already
-# exists, so the first version uses an NPM_TOKEN secret on the npm-release environment.
-# Configure the trusted publisher on npmjs.com after the first release, then delete the secret.
+# npm-release environment, so no npm token is stored here. An NPM_TOKEN secret on the
+# environment is used instead if one is set.
 #
 # Provenance needs a public repository.
 on:
@@ -53,12 +53,15 @@ jobs:
       - run: npm test
       - run: npm audit --omit=dev --audit-level=high -w @wati-io/chat-sdk-adapter
       - run: npm run build -w @wati-io/chat-sdk-adapter
+      # Trusted publishing needs npm 11.5.1 or later.
+      - name: Update npm
+        run: npm install -g npm@^11.5.1 && npm --version
       - name: Publish with provenance
         working-directory: adapter
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           set -euo pipefail
-          # Bootstrap only: a token until the trusted publisher exists; OIDC otherwise.
+          # Trusted publishing (OIDC) unless an NPM_TOKEN secret is set.
           if [ -n "${NPM_TOKEN}" ]; then export NODE_AUTH_TOKEN="${NPM_TOKEN}"; fi
           npm publish --provenance --access public --ignore-scripts
