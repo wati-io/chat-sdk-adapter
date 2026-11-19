@@ -75,7 +75,7 @@ Send these to your Wati number:
 | `menu` | List message. Pick an option to test `onAction` with a value. |
 | `file` | Uploading a generated text file |
 | `pdf` | Sending a file by URL with a caption |
-| `typing` | Typing indicator, then a reply 3 seconds later |
+| `typing` | Typing indicator, then a reply 3 seconds later. Needs Wati → Settings → Team Inbox → General Settings → Show typing indicator to customers. |
 | `history` | `fetchMessages`: last 10 messages, oldest first |
 | `long` | Splitting a message over 4,096 characters |
 | `template <name>` | `sendTemplate` with an approved template |

@@ -2,6 +2,10 @@
 
 All notable changes to `@wati-io/chat-sdk-adapter` are listed here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions follow [Semantic Versioning](https://semver.org/).
 
+## Unreleased
+
+- The README and the warning logged when typing indicators are off now say how to turn them on in Wati.
+
 ## 0.1.0
 
 First release.

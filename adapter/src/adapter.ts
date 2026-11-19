@@ -380,7 +380,7 @@ export class WatiAdapter implements Adapter<WatiThreadId, WatiRawMessage> {
       if (/typing indicator is disabled/i.test(message)) {
         this.typingDisabled = true;
         this.logger.warn(
-          "Typing indicators are disabled for this Wati account; skipping them from now on. Ask Wati support to enable the feature.",
+          "Typing indicators are off for this Wati account; skipping them from now on. Turn them on in Wati: Settings → Team Inbox → General Settings → Show typing indicator to customers.",
         );
         return;
       }

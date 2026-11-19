@@ -160,6 +160,8 @@ await bot.thread(threadId).subscribe();
 
 `thread.startTyping()` shows "typing…" for up to 25 seconds or until your reply arrives. It also marks the customer's last message as read.
 
+Typing indicators are available on every Wati plan but are off until you turn them on: **Settings → Team Inbox → General Settings → Show typing indicator to customers** ([how to](https://support.wati.io/en/articles/14753951-how-to-enable-typing-indicator-in-wati)). While they're off, the adapter logs one warning, skips typing and still sends your replies.
+
 ## Receiving
 
 - Text, media (image, video, audio, voice, document, sticker) and locations arrive as Chat SDK messages. Media attachments download lazily through `fetchData()`.
