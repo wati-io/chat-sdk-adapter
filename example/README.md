@@ -4,7 +4,7 @@ A Next.js app that runs a WhatsApp bot with [`@wati-io/chat-sdk-adapter`](https:
 
 What you need:
 
-- A Wati workspace with a connected WhatsApp number, on a plan that includes webhooks (Pro or Business on current [pricing](https://www.wati.io/pricing-comparison/))
+- A Wati workspace with a connected WhatsApp number, on a plan that includes webhooks (Pro or Business on current [pricing](https://www.wati.io/pricing-comparison/)), or a [7-day free trial](https://www.wati.io/signup/)
 - A Wati **API endpoint** and **access token** (Wati → **API Docs**)
 - A phone with WhatsApp to message that number
 

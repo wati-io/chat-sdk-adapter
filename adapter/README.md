@@ -48,6 +48,8 @@ Every WhatsApp conversation is one-to-one, so handle messages with `onDirectMess
 
 A Wati plan with **webhooks** and the **messaging API**. On Wati's current [pricing](https://www.wati.io/pricing-comparison/), that's **Pro** or **Business**. Growth includes the messaging API but no webhooks, so on Growth the adapter can only send (`postMessage`, `sendTemplate`); it can't receive messages.
 
+**Try it free:** the [7-day Wati free trial](https://www.wati.io/signup/) includes the API and webhooks once your WhatsApp number is connected, so you can build and test a bot before choosing a plan.
+
 ## Setup in Wati
 
 1. In Wati, open **API Docs** and copy the **API endpoint** host (for example `https://live-mt-server.wati.io`) and an **access token**. Use the host for your workspace's region.
