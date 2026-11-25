@@ -59,7 +59,7 @@ A Wati plan with **webhooks** and the **messaging API**. On Wati's current [pric
 4. Subscribe to the **Message Received** (`message`) event. You don't need status events.
 5. Set the environment variables below.
 
-Wati doesn't sign webhooks, so the adapter checks a shared secret instead, the same way Chat SDK's Telegram adapter does. Every delivery must carry your secret in the `token` query parameter; anything else gets a `401`. Use a long random secret and keep the full webhook URL private, since it contains the secret. (An `x-wati-webhook-secret` header is also accepted, for setups that can add headers.)
+Wati doesn't sign webhooks, so the adapter checks a shared secret instead. Every delivery must carry your secret in the `token` query parameter, or in an `x-wati-webhook-secret` header for setups that can add headers; anything else gets a `401`. Query parameters often appear in request and proxy logs, so use a long random secret, treat the full webhook URL as a credential, and rotate the secret if it leaks.
 
 ## Environment variables
 

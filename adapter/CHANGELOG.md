@@ -4,6 +4,7 @@ All notable changes to `@wati-io/chat-sdk-adapter` are listed here. The format f
 
 ## Unreleased
 
+- The README describes the webhook secret's real risk (query parameters can appear in logs) instead of comparing it to the Telegram adapter, which uses a header.
 - The README says you can try the adapter on Wati's 7-day free trial, which includes the API and webhooks.
 
 ## 0.1.1 (2026-11-19)
