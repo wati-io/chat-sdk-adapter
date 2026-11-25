@@ -54,7 +54,8 @@ interface CollectedActions {
  * Decide how to send a card through Wati:
  *
  * - 1–3 reply buttons → interactive buttons message
- * - 4–10 reply buttons, or a select menu → interactive list message
+ * - 4–10 reply buttons, or a select menu → interactive list message (buttons
+ *   alongside a select become an extra section of that list)
  * - anything else → formatted text, with link buttons written out as URLs
  *
  * `renderText` turns standard Markdown into WhatsApp text.
@@ -77,19 +78,16 @@ export function planCard(
   const title = card.title?.trim();
 
   if (collected.selects.length > 0) {
-    return listPlan(card, body, title, selectRows(collected.selects));
+    // WhatsApp can't show a list and reply buttons in one message, so buttons
+    // next to a select become one more section of the list instead of being
+    // dropped. listPlan rejects the card if the total passes the row limit.
+    const sections = selectRows(collected.selects);
+    if (buttons.length > 0) sections.push(buttonSection(buttons, "More options"));
+    return listPlan(card, body, title, sections);
   }
 
   if (buttons.length > LIMITS.buttons) {
-    return listPlan(card, body, title, [
-      {
-        sectionTitle: "Options",
-        rows: buttons.map((button) => ({
-          title: button.label,
-          mapping: { actionId: button.id, value: button.value },
-        })),
-      },
-    ]);
+    return listPlan(card, body, title, [buttonSection(buttons, "Options")]);
   }
 
   if (buttons.length > 0) {
@@ -174,6 +172,16 @@ function listPlan(
     payload.footer = truncate(card.subtitle, LIMITS.footer);
   }
   return { kind: "list", payload, actions };
+}
+
+function buttonSection(buttons: ButtonElement[], sectionTitle: string): PlannedSection {
+  return {
+    sectionTitle,
+    rows: buttons.map((button) => ({
+      title: button.label,
+      mapping: { actionId: button.id, value: button.value },
+    })),
+  };
 }
 
 function selectRows(selects: Select[]): PlannedSection[] {

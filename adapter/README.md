@@ -50,6 +50,8 @@ A Wati plan with **webhooks** and the **messaging API**. On Wati's current [pric
 
 **Try it free:** the [7-day Wati free trial](https://www.wati.io/signup/) includes the API and webhooks once your WhatsApp number is connected, so you can build and test a bot before choosing a plan.
 
+**Runtime:** Node.js 20.19 or later. The adapter uses Node's `crypto` and `Buffer`, so it doesn't run on the Edge runtime. Next.js route handlers use Node.js by default; if yours sets `runtime = "edge"`, change it to `"nodejs"`.
+
 ## Setup in Wati
 
 1. In Wati, open **API Docs** and copy the **API endpoint** host (for example `https://live-mt-server.wati.io`) and an **access token**. Use the host for your workspace's region.
