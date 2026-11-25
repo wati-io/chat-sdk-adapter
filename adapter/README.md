@@ -50,6 +50,8 @@ A Wati plan with **webhooks** and the **messaging API**. On Wati's current [pric
 
 **Try it free:** the [7-day Wati free trial](https://www.wati.io/signup/) includes the API and webhooks once your WhatsApp number is connected, so you can build and test a bot before choosing a plan.
 
+**Runtime:** Node.js 20.19 or later. The adapter uses Node's `crypto` and `Buffer`, so it doesn't run on the Edge runtime. Next.js route handlers use Node.js by default; if yours sets `runtime = "edge"`, change it to `"nodejs"`.
+
 ## Setup in Wati
 
 1. In Wati, open **API Docs** and copy the **API endpoint** host (for example `https://live-mt-server.wati.io`) and an **access token**. Use the host for your workspace's region.
@@ -59,7 +61,7 @@ A Wati plan with **webhooks** and the **messaging API**. On Wati's current [pric
 4. Subscribe to the **Message Received** (`message`) event. You don't need status events.
 5. Set the environment variables below.
 
-Wati doesn't sign webhooks, so the adapter checks a shared secret instead, the same way Chat SDK's Telegram adapter does. Every delivery must carry your secret in the `token` query parameter; anything else gets a `401`. Use a long random secret and keep the full webhook URL private, since it contains the secret. (An `x-wati-webhook-secret` header is also accepted, for setups that can add headers.)
+Wati doesn't sign webhooks, so the adapter checks a shared secret instead. Every delivery must carry your secret in the `token` query parameter, or in an `x-wati-webhook-secret` header for setups that can add headers; anything else gets a `401`. Query parameters often appear in request and proxy logs, so use a long random secret, treat the full webhook URL as a credential, and rotate the secret if it leaks.
 
 ## Environment variables
 

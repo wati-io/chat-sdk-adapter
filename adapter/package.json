@@ -1,6 +1,6 @@
 {
   "name": "@wati-io/chat-sdk-adapter",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Official Wati adapter for Chat SDK: build WhatsApp bots on your Wati number",
   "type": "module",
   "sideEffects": false,

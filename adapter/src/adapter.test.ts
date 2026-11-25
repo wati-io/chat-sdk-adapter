@@ -514,6 +514,70 @@ describe("cards and button replies", () => {
     expect(ctx.received.actions[0]).toMatchObject({ actionId: "size", value: "l" });
   });
 
+  it("keeps buttons next to a select as an extra list section and routes both", async () => {
+    const ctx = createTestContext();
+    await ctx.send(incomingMessage());
+    const { thread } = ctx.received.messages[0]!;
+    await thread.post(
+      Card({
+        title: "Pick a size",
+        children: [
+          CardText("Or talk to us."),
+          Actions([
+            Select({
+              id: "size",
+              label: "Sizes",
+              options: [SelectOption({ label: "Small", value: "s" }), SelectOption({ label: "Large", value: "l" })],
+            }),
+            Button({ id: "agent", label: "Talk to an agent", value: "help" }),
+          ]),
+        ],
+      }),
+    );
+    const sent = ctx.calls.find((c) => c.path.endsWith("/interactive"))!;
+    expect(sent.json).toMatchObject({
+      type: "list",
+      list_message: {
+        button_text: "Options",
+        sections: [
+          { title: "Sizes", rows: [{ title: "Small" }, { title: "Large" }] },
+          { title: "More options", rows: [{ title: "Talk to an agent" }] },
+        ],
+      },
+    });
+
+    await ctx.send(
+      incomingMessage({ id: "reply-a", type: "interactive", text: null, listReply: { title: "Talk to an agent" } }),
+    );
+    await ctx.send(incomingMessage({ id: "reply-b", type: "interactive", text: null, listReply: { title: "Small" } }));
+    expect(ctx.received.actions.map((a) => [a.actionId, a.value])).toEqual([
+      ["agent", "help"],
+      ["size", "s"],
+    ]);
+  });
+
+  it("rejects a select plus buttons over the 10-option list limit instead of dropping any", async () => {
+    const ctx = createTestContext();
+    await expect(
+      ctx.adapter.postMessage(THREAD, {
+        card: Card({
+          children: [
+            Actions([
+              Select({
+                id: "n",
+                label: "Numbers",
+                options: Array.from({ length: 9 }, (_, i) => SelectOption({ label: `Option ${i + 1}`, value: `${i + 1}` })),
+              }),
+              Button({ id: "a", label: "Extra A" }),
+              Button({ id: "b", label: "Extra B" }),
+            ]),
+          ],
+        }),
+      }),
+    ).rejects.toThrow(/at most 10 options; this card has 11/);
+    expect(ctx.calls).toHaveLength(0);
+  });
+
   // Payload shapes below were captured from a live Wati account (2026-11-17).
   it("routes a real Wati button tap payload", async () => {
     const ctx = createTestContext();

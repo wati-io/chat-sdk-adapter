@@ -2,8 +2,11 @@
 
 All notable changes to `@wati-io/chat-sdk-adapter` are listed here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions follow [Semantic Versioning](https://semver.org/).
 
-## Unreleased
+## 0.1.2 (2026-11-25)
 
+- Buttons on a card that also has a `Select` are no longer dropped: they're sent as an extra "More options" section of the same WhatsApp list and route to `onAction` as usual. If the combined options pass WhatsApp's limit of 10, the adapter throws a validation error instead of sending a partial list.
+- The README states the runtime requirement: Node.js 20.19 or later, not the Edge runtime.
+- The README describes the webhook secret's real risk (query parameters can appear in logs) instead of comparing it to the Telegram adapter, which uses a header.
 - The README says you can try the adapter on Wati's 7-day free trial, which includes the API and webhooks.
 
 ## 0.1.1 (2026-11-19)
